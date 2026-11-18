@@ -280,3 +280,32 @@ section { padding: 36px 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* ---------- Ratings ---------- */
+.stars { position: relative; display: inline-block; font-size: 1.25rem; letter-spacing: 2px; line-height: 1; }
+.stars::before { content: "★★★★★"; color: var(--muted); opacity: .3; }
+.stars::after { content: "★★★★★"; position: absolute; left: 0; top: 0; width: var(--p, 0%); overflow: hidden; white-space: nowrap; color: #ffb400; }
+.rt-wrap { display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: center; margin-top: 6px; }
+.rt-big { display: grid; justify-items: center; gap: 6px; text-align: center; }
+.rt-big strong { font-size: 3.4rem; line-height: 1; letter-spacing: -.03em; }
+.rt-big small { color: var(--muted); font-weight: 600; }
+.rt-bars { display: grid; gap: 6px; }
+.rt-bar { display: grid; grid-template-columns: 14px 1fr; gap: 10px; align-items: center; font-weight: 700; font-size: .85rem; }
+.rt-track { height: 12px; border: 2px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--bg); }
+.rt-fill { height: 100%; background: var(--yellow); border-right: 2px solid var(--line); transition: width .4s; }
+.rate-title { margin-top: 22px; font-size: 1.05rem; }
+.rate { display: flex; gap: 8px; margin: 10px 0 8px; }
+.rate button {
+  width: 50px; height: 50px; font-size: 1.5rem; line-height: 1; cursor: pointer; color: var(--muted);
+  background: var(--surface); border: var(--bw) solid var(--line); border-radius: 12px;
+  box-shadow: 3px 3px 0 var(--shadow-c); transition: transform .12s, box-shadow .12s, background .12s;
+}
+.rate button.on { background: var(--yellow); color: #111; }
+.rate button:active { transform: translate(3px, 3px); box-shadow: none; }
+.rate button:disabled { cursor: wait; }
+.rt-pill { background: var(--surface); color: var(--text); }
+@media (max-width: 760px) {
+  .rt-wrap { gap: 18px; }
+  .rt-big strong { font-size: 2.8rem; }
+  .rate button { flex: 1; width: auto; }
+}

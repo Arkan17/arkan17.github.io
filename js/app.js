@@ -3,6 +3,8 @@
   "use strict";
 
   const DATA_URL = "data/apps.json";
+  const SCRIPT_URL = document.currentScript && document.currentScript.src;
+  const RATINGS_ON = !!window.ARKAN_FIREBASE;
   const DEVELOPER = "Arkan17";
 
   /* ---------- Helpers ---------- */
@@ -133,6 +135,7 @@
 
   /* Fill every [data-dl] / [data-dl-sub] / #stat-dl element once counts arrive */
   async function applyDownloads(apps) {
+    applyListRatings(apps);
     let map;
     try { map = await loadDownloads(); } catch (e) { console.warn("Download counts unavailable:", e); }
     document.querySelectorAll("[data-dl]").forEach((el) => {
@@ -144,6 +147,102 @@
     });
     const total = $("#stat-dl");
     if (total) total.textContent = map ? fmtCount(apps.reduce((t, a) => t + (map[a.id] || 0), 0)) : "—";
+  }
+
+  /* ---------- Star ratings (Firebase, optional) ---------- */
+  let ratingsMod = null;
+  function ratingsModule() {
+    if (!RATINGS_ON) return Promise.resolve(null);
+    if (!ratingsMod) {
+      const url = new URL(SCRIPT_URL ? "ratings.js" : "js/ratings.js", SCRIPT_URL || location.href).href;
+      ratingsMod = import(url).catch((e) => { console.warn("Ratings unavailable:", e); return null; });
+    }
+    return ratingsMod;
+  }
+  const RT_CACHE = "arkan.ratings.v1";
+  let listRatings = null;
+
+  async function applyListRatings(apps) {
+    if (!RATINGS_ON || !document.querySelector("[data-rt-pill]")) return;
+    if (!listRatings) {
+      try {
+        const c = JSON.parse(sessionStorage.getItem(RT_CACHE) || "null");
+        if (c && Date.now() - c.t < 10 * 60 * 1000) listRatings = c.m;
+      } catch (e) { /* storage unavailable */ }
+    }
+    if (!listRatings) {
+      const R = await ratingsModule();
+      if (!R) return;
+      const pairs = await Promise.all(apps.map((a) => R.summary(a.id).then((x) => [a.id, x]).catch(() => [a.id, null])));
+      listRatings = Object.fromEntries(pairs);
+      try { sessionStorage.setItem(RT_CACHE, JSON.stringify({ t: Date.now(), m: listRatings })); } catch (e) { /* ignore */ }
+    }
+    document.querySelectorAll("[data-rt-pill]").forEach((el) => {
+      const r = listRatings[el.dataset.rtPill];
+      if (r && r.n) { el.textContent = "★ " + r.avg.toFixed(1); el.hidden = false; }
+    });
+  }
+
+  function getLocal(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+  function setLocal(key, v) { try { localStorage.setItem(key, v); } catch (e) { /* ignore */ } }
+
+  async function initRatingsUI(app) {
+    const panel = $("#ratings-panel");
+    if (!panel) return;
+    const R = await ratingsModule();
+    if (!R) return;
+    panel.hidden = false;
+    const key = "arkan.rated." + app.id;
+    let mine = parseInt(getLocal(key) || "0", 10);
+    const btns = $$("#rate button");
+    const msg = $("#rate-msg");
+    const paint = (k) => btns.forEach((b, i) => { b.classList.toggle("on", i < k); b.setAttribute("aria-checked", String(i + 1 === mine)); });
+    paint(mine);
+    if (mine) msg.textContent = "You rated " + mine + " ★. Tap a star to change it.";
+
+    async function refresh() {
+      try {
+        const { dist, n, avg } = await R.distribution(app.id);
+        const label = n ? fmtCount(n) + " rating" + (n === 1 ? "" : "s") : "No ratings yet";
+        $("#rt-avg").textContent = n ? avg.toFixed(1) : "–";
+        $("#rt-stars").style.setProperty("--p", (avg / 5) * 100 + "%");
+        $("#rt-stars").setAttribute("aria-label", n ? avg.toFixed(1) + " out of 5" : "No ratings yet");
+        $("#rt-count").textContent = label;
+        $("#rt-bars").innerHTML = [5, 4, 3, 2, 1].map((k) =>
+          '<div class="rt-bar"><span>' + k + '</span><div class="rt-track"><div class="rt-fill" style="width:' + (n ? (dist[k] / n) * 100 : 0) + '%"></div></div></div>').join("");
+        document.querySelectorAll("[data-rt-avg]").forEach((el) => (el.textContent = n ? avg.toFixed(1) + " ★" : "–"));
+        document.querySelectorAll("[data-rt-n]").forEach((el) => (el.textContent = n ? label : "No ratings"));
+      } catch (e) {
+        console.warn("Couldn’t load ratings:", e);
+        $("#rt-count").textContent = "Ratings unavailable right now";
+      }
+    }
+
+    btns.forEach((b, i) => {
+      b.addEventListener("mouseenter", () => paint(i + 1));
+      b.addEventListener("mouseleave", () => paint(mine));
+      b.addEventListener("click", async () => {
+        const k = i + 1;
+        btns.forEach((x) => (x.disabled = true));
+        msg.textContent = "Saving…";
+        try {
+          await R.rate(app.id, k);
+          mine = k;
+          setLocal(key, String(k));
+          try { sessionStorage.removeItem(RT_CACHE); } catch (e) { /* ignore */ }
+          paint(mine);
+          msg.textContent = "Thanks! You rated " + k + " ★. Tap a star to change it.";
+          await refresh();
+        } catch (e) {
+          console.warn(e);
+          paint(mine);
+          msg.textContent = "Couldn’t save your rating. Please try again.";
+        } finally {
+          btns.forEach((x) => (x.disabled = false));
+        }
+      });
+    });
+    refresh();
   }
 
   async function loadApps() {
@@ -206,7 +305,7 @@
           <a class="info" href="${detailUrl(a)}">
             <h3>${esc(a.name)}</h3>
             <div class="sub">${esc(a.category)} · ${esc(a.size)}<span data-dl-sub="${esc(a.id)}"></span></div>
-            <span class="pill">v${esc(a.version)}</span>
+            <span class="pill">v${esc(a.version)}</span> <span class="pill rt-pill" data-rt-pill="${esc(a.id)}" hidden></span>
           </a>
           ${getButton(a)}
         </article>`).join("");
@@ -258,10 +357,11 @@
         </div>
       </div>
       <div class="d-stats box">
+        ${RATINGS_ON ? `<div><strong data-rt-avg>…</strong><small data-rt-n>Ratings</small></div>` : ""}
         <div><strong data-dl="${esc(app.id)}">…</strong><small>Downloads</small></div>
-        <div><strong>${esc(app.version)}</strong><small>Version</small></div>
         <div><strong>${esc(app.size)}</strong><small>Size</small></div>
-        <div><strong>${formatDate(app.updated)}</strong><small>Updated</small></div>
+        <div><strong>${esc(app.version)}</strong><small>Version</small></div>
+        ${RATINGS_ON ? "" : `<div><strong>${formatDate(app.updated)}</strong><small>Updated</small></div>`}
       </div>
       <div class="d-actions">
         ${installButton(app)}
@@ -281,6 +381,18 @@
             <ul class="feature-list">${(app.features || []).map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
             <div class="tags"><span class="chip">${esc(app.category)}</span></div>
           </div>
+          ${RATINGS_ON ? `<div class="panel box" id="ratings-panel" hidden>
+            <h2>Ratings</h2>
+            <div class="rt-wrap">
+              <div class="rt-big"><strong id="rt-avg">…</strong><span class="stars" id="rt-stars" role="img" aria-label="Loading rating"></span><small id="rt-count">Loading…</small></div>
+              <div class="rt-bars" id="rt-bars"></div>
+            </div>
+            <h3 class="rate-title">Rate this app</h3>
+            <div class="rate" id="rate" role="radiogroup" aria-label="Rate this app">
+              ${[1, 2, 3, 4, 5].map((k) => `<button type="button" role="radio" aria-checked="false" aria-label="${k} star${k > 1 ? "s" : ""}">★</button>`).join("")}
+            </div>
+            <p class="sub" id="rate-msg">Tap a star to rate. No sign-up needed.</p>
+          </div>` : ""}
           <div class="panel box">
             <h2>What’s new</h2>
             <p><strong style="color:var(--text)">v${esc(app.version)}</strong> · ${formatDate(app.updated)}</p>
@@ -314,6 +426,7 @@
 
     wireRail($("#more-rail"), $("#more-prev"), $("#more-next"));
     applyDownloads(apps);
+    initRatingsUI(app);
 
     $("#share-btn").addEventListener("click", async () => {
       const data = { title: app.name, text: app.tagline, url: location.href };

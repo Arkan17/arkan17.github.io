@@ -1,0 +1,30 @@
+rules_version = '2';
+// Paste these into Firebase Console → Firestore Database → Rules → Publish.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /ratings/{docId} {
+      // Anyone can read ratings (needed to show averages).
+      allow read: if true;
+
+      // A signed-in (anonymous) visitor can only write their own rating doc,
+      // with a whole-number 1–5 star value and nothing else.
+      allow create, update: if request.auth != null
+        && request.resource.data.keys().hasOnly(['appId', 'uid', 'stars', 'updatedAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.appId is string
+        && request.resource.data.appId.matches('^[a-z0-9-]{1,50}$')
+        && docId == request.resource.data.appId + '_' + request.auth.uid
+        && request.resource.data.stars is int
+        && request.resource.data.stars >= 1
+        && request.resource.data.stars <= 5
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if false;
+    }
+
+    // Everything else is locked.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
