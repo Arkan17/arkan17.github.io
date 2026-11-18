@@ -5,26 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>App Details | Arkan Apps</title>
   <meta name="description" content="App details and APK download on Arkan Apps.">
-  <meta name="theme-color" content="#0b0d14">
+  <meta name="theme-color" content="#fff8e7">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="detail">
-  <header class="header">
-    <nav class="container nav">
-      <a class="logo" href="index.html"><img src="assets/favicon.svg" alt="" width="34" height="34"><span>Arkan <b>Apps</b></span></a>
+  <header class="topbar">
+    <div class="container bar">
+      <a class="logo" href="index.html"><img src="assets/favicon.svg" alt="" width="38" height="38"><span>Arkan Apps</span></a>
+      <form class="search" action="index.html" role="search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input name="q" type="search" placeholder="Search for apps" aria-label="Search apps" autocomplete="off">
+      </form>
       <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="index.html#apps" class="active">Apps</a></li>
+        <li><a href="index.html" class="active">Apps</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="privacy.html">Privacy</a></li>
         <li><a href="index.html#contact">Contact</a></li>
       </ul>
-    </nav>
+    </div>
   </header>
 
   <main class="container" id="app-detail">
@@ -33,9 +36,9 @@
 
   <div class="lightbox" id="lightbox" role="dialog" aria-label="Screenshot preview"><img src="" alt=""></div>
 
-  <footer class="footer" style="margin-top:70px">
+  <footer class="footer">
     <div class="container">
-      <span>&copy; <span id="year"></span> Arkan Apps. All rights reserved.</span>
+      <span>&copy; <span id="year"></span> Arkan Apps</span>
       <nav><a href="about.html">About</a><a href="privacy.html">Privacy Policy</a><a href="index.html#contact">Contact</a></nav>
     </div>
   </footer>

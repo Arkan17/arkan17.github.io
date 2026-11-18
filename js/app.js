@@ -3,10 +3,13 @@
   "use strict";
 
   const DATA_URL = "data/apps.json";
+  const DEVELOPER = "Arkan17";
 
   /* ---------- Helpers ---------- */
   const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const detailUrl = (a) => "app.html?id=" + encodeURIComponent(a.id);
 
   function formatDate(iso) {
     if (!iso) return "—";
@@ -15,7 +18,7 @@
   }
 
   function shade(hex, amt) {
-    const n = parseInt(hex.replace("#", ""), 16);
+    const n = parseInt(String(hex).replace("#", ""), 16);
     const r = Math.max(0, Math.min(255, (n >> 16) + amt));
     const g = Math.max(0, Math.min(255, ((n >> 8) & 255) + amt));
     const b = Math.max(0, Math.min(255, (n & 255) + amt));
@@ -24,34 +27,76 @@
 
   const svgUri = (svg) => "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 
-  /* Placeholder icon: gradient tile with initials */
+  /* Placeholder icon: flat brutalist tile with initials */
   function placeholderIcon(app) {
-    const c = app.color || "#7c5cff";
+    const c = app.color || "#4d7cff";
     const initials = app.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
     return svgUri(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${shade(c, -70)}"/></linearGradient></defs><rect width="128" height="128" rx="30" fill="url(#g)"/><text x="64" y="80" font-family="Segoe UI,Arial,sans-serif" font-size="46" font-weight="800" fill="#fff" text-anchor="middle">${esc(initials)}</text></svg>`
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" fill="${c}"/><circle cx="104" cy="22" r="34" fill="${shade(c, 40)}"/><rect x="-10" y="92" width="70" height="70" rx="10" transform="rotate(-18 25 127)" fill="${shade(c, -40)}"/><text x="64" y="81" font-family="Space Grotesk,Segoe UI,Arial,sans-serif" font-size="48" font-weight="700" fill="#fff" stroke="#111" stroke-width="3" paint-order="stroke" text-anchor="middle">${esc(initials)}</text></svg>`
     );
   }
 
   /* Placeholder screenshot: stylised phone UI */
   function placeholderShot(app, i) {
-    const c = app.color || "#7c5cff";
-    const rows = [0, 1, 2, 3, 4].map((k) => `<rect x="24" y="${210 + k * 70}" width="312" height="54" rx="12" fill="#1b2032"/><rect x="38" y="${224 + k * 70}" width="26" height="26" rx="8" fill="${c}" opacity="${0.5 + k * 0.1}"/><rect x="78" y="${228 + k * 70}" width="${120 + ((k * 37 + i * 23) % 120)}" height="8" rx="4" fill="#3a4260"/><rect x="78" y="${242 + k * 70}" width="${80 + ((k * 19 + i * 31) % 90)}" height="6" rx="3" fill="#2a3048"/>`).join("");
+    const c = app.color || "#4d7cff";
+    const rows = [0, 1, 2, 3, 4].map((k) => `<rect x="22" y="${214 + k * 72}" width="316" height="56" rx="12" fill="#fff" stroke="#111" stroke-width="3"/><rect x="36" y="${227 + k * 72}" width="30" height="30" rx="8" fill="${k % 2 ? "#ffd23f" : c}" stroke="#111" stroke-width="2.5"/><rect x="80" y="${231 + k * 72}" width="${120 + ((k * 37 + i * 23) % 120)}" height="9" rx="4" fill="#111"/><rect x="80" y="${246 + k * 72}" width="${80 + ((k * 19 + i * 31) % 90)}" height="7" rx="3" fill="#999"/>`).join("");
     return svgUri(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 760"><defs><linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${shade(c, -80)}"/></linearGradient></defs><rect width="360" height="760" fill="#0f1220"/><rect width="360" height="180" fill="url(#h)"/><text x="24" y="90" font-family="Segoe UI,Arial,sans-serif" font-size="26" font-weight="800" fill="#fff">${esc(app.name)}</text><text x="24" y="122" font-family="Segoe UI,Arial,sans-serif" font-size="14" fill="#ffffffcc">Screen ${i + 1}</text>${rows}<rect x="24" y="680" width="312" height="48" rx="24" fill="${c}"/></svg>`
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 760"><rect width="360" height="760" fill="#fff8e7"/><rect width="360" height="184" fill="${c}" stroke="#111" stroke-width="3"/><text x="22" y="96" font-family="Space Grotesk,Segoe UI,Arial,sans-serif" font-size="28" font-weight="700" fill="#fff" stroke="#111" stroke-width="2" paint-order="stroke">${esc(app.name)}</text><text x="22" y="128" font-family="Space Grotesk,Segoe UI,Arial,sans-serif" font-size="15" font-weight="600" fill="#111">Screen ${i + 1}</text>${rows}<rect x="22" y="676" width="316" height="52" rx="14" fill="#00b86b" stroke="#111" stroke-width="3"/></svg>`
     );
   }
 
   const iconOf = (app) => app.icon || placeholderIcon(app);
   const shotsOf = (app) => (app.screenshots && app.screenshots.length ? app.screenshots : [0, 1, 2, 3].map((i) => placeholderShot(app, i)));
 
-  function downloadButton(app, extraClass = "") {
+  const DL_SVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>`;
+
+  function installButton(app) {
     if (app.downloadUrl) {
-      return `<a class="btn btn-primary ${extraClass}" href="${esc(app.downloadUrl)}" rel="noopener" download>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
-        Download APK</a>`;
+      return `<a class="btn btn-install" href="${esc(app.downloadUrl)}" rel="noopener" download>${DL_SVG} Install APK</a>`;
     }
-    return `<span class="btn btn-primary ${extraClass}" aria-disabled="true" title="APK not published yet">Coming soon</span>`;
+    return `<span class="btn btn-install" aria-disabled="true" title="APK not published yet">Coming soon</span>`;
+  }
+
+  function getButton(app) {
+    if (app.downloadUrl) {
+      return `<a class="get" href="${esc(app.downloadUrl)}" rel="noopener" download aria-label="Download ${esc(app.name)} APK" title="Download APK">${DL_SVG}</a>`;
+    }
+    return `<span class="get" aria-disabled="true" title="Coming soon" aria-label="${esc(app.name)} coming soon">…</span>`;
+  }
+
+  function featCard(a) {
+    return `<article class="feat box press">
+      <a class="feat-banner" href="${detailUrl(a)}" style="background:${esc(a.color || "#4d7cff")}">
+        <img class="app-icon" src="${iconOf(a)}" alt="" width="96" height="96">
+      </a>
+      <div class="feat-body">
+        <div class="info"><h3><a href="${detailUrl(a)}">${esc(a.name)}</a></h3><p>${esc(a.tagline)}</p></div>
+        ${getButton(a)}
+      </div>
+    </article>`;
+  }
+
+  function miniCard(a) {
+    return `<a class="mini box press" href="${detailUrl(a)}">
+      <img class="app-icon" src="${iconOf(a)}" alt="" loading="lazy">
+      <div><h3>${esc(a.name)}</h3><div class="sub">${esc(a.size)}</div></div>
+    </a>`;
+  }
+
+  function toast(msg) {
+    let t = $(".toast");
+    if (!t) { t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => t.classList.remove("show"), 2200);
+  }
+
+  function wireRail(rail, prev, next) {
+    if (!rail) return;
+    const step = () => Math.max(rail.clientWidth * 0.8, 260);
+    prev && prev.addEventListener("click", () => rail.scrollBy({ left: -step(), behavior: "smooth" }));
+    next && next.addEventListener("click", () => rail.scrollBy({ left: step(), behavior: "smooth" }));
   }
 
   async function loadApps() {
@@ -61,57 +106,62 @@
     return json.apps || [];
   }
 
-  /* ---------- Mobile nav ---------- */
+  /* ---------- Nav (all pages) ---------- */
   function initNav() {
     const btn = $(".menu-btn");
     const links = $(".nav-links");
     if (btn && links) {
-      btn.addEventListener("click", () => {
-        const open = links.classList.toggle("open");
-        btn.setAttribute("aria-expanded", open);
-      });
+      btn.addEventListener("click", () => btn.setAttribute("aria-expanded", links.classList.toggle("open")));
       links.addEventListener("click", (e) => { if (e.target.tagName === "A") links.classList.remove("open"); });
     }
     const y = $("#year");
     if (y) y.textContent = new Date().getFullYear();
   }
 
-  /* ---------- Home page ---------- */
+  /* ---------- Home ---------- */
   function initHome(apps) {
-    const grid = $("#app-grid");
-    const search = $("#search");
+    const list = $("#app-grid");
+    const input = $("#search");
+    const form = $("#search-form");
     const chipsWrap = $("#chips");
+    const promo = $$("[data-promo]");
+    const listTitle = $("#list-title");
     let activeCat = "All";
 
     const cats = ["All", ...Array.from(new Set(apps.map((a) => a.category))).sort()];
     chipsWrap.innerHTML = cats.map((c) => `<button class="chip${c === "All" ? " active" : ""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
-
     $("#stat-apps").textContent = apps.length;
     $("#stat-cats").textContent = cats.length - 1;
 
+    const featured = apps.filter((a) => a.featured);
+    $("#featured-rail").innerHTML = (featured.length ? featured : apps.slice(0, 4)).map(featCard).join("");
+    wireRail($("#featured-rail"), $("#feat-prev"), $("#feat-next"));
+
     function render() {
-      const q = search.value.trim().toLowerCase();
-      const list = apps.filter((a) => {
+      const q = input.value.trim().toLowerCase();
+      const filtering = q || activeCat !== "All";
+      promo.forEach((el) => (el.hidden = !!filtering));
+      listTitle.textContent = q ? `Results for “${input.value.trim()}”` : activeCat !== "All" ? activeCat : "All apps";
+
+      const items = apps.filter((a) => {
         const inCat = activeCat === "All" || a.category === activeCat;
         const hay = [a.name, a.tagline, a.description, a.category].join(" ").toLowerCase();
         return inCat && (!q || hay.includes(q));
       });
-      if (!list.length) {
-        grid.innerHTML = `<div class="empty">No apps match your search.</div>`;
+      if (!items.length) {
+        list.innerHTML = `<div class="empty box">No apps found. Try another search.</div>`;
         return;
       }
-      grid.innerHTML = list.map((a, i) => `
-        <article class="card" style="animation-delay:${Math.min(i * 50, 500)}ms">
-          <a class="card-top" href="app.html?id=${encodeURIComponent(a.id)}">
-            <img class="app-icon" src="${iconOf(a)}" alt="${esc(a.name)} icon" loading="lazy" width="64" height="64">
-            <div><h3>${esc(a.name)}</h3><div class="cat">${esc(a.category)}</div></div>
+      list.innerHTML = items.map((a, i) => `
+        <article class="row box press" style="animation-delay:${Math.min(i * 40, 400)}ms">
+          <span class="rank">${i + 1}</span>
+          <a href="${detailUrl(a)}"><img class="app-icon" src="${iconOf(a)}" alt="${esc(a.name)} icon" loading="lazy" width="64" height="64"></a>
+          <a class="info" href="${detailUrl(a)}">
+            <h3>${esc(a.name)}</h3>
+            <div class="sub">${esc(a.category)} · ${esc(a.size)}</div>
+            <span class="pill">v${esc(a.version)}</span>
           </a>
-          <p>${esc(a.tagline)}</p>
-          <div class="meta"><span>v${esc(a.version)}</span><span>${esc(a.size)}</span><span>Updated ${formatDate(a.updated)}</span></div>
-          <div class="card-actions">
-            <a class="btn btn-ghost" href="app.html?id=${encodeURIComponent(a.id)}">Details</a>
-            ${downloadButton(a)}
-          </div>
+          ${getButton(a)}
         </article>`).join("");
     }
 
@@ -119,67 +169,114 @@
       const chip = e.target.closest(".chip");
       if (!chip) return;
       activeCat = chip.dataset.cat;
-      chipsWrap.querySelectorAll(".chip").forEach((c) => c.classList.toggle("active", c === chip));
+      $$(".chip", chipsWrap).forEach((c) => c.classList.toggle("active", c === chip));
       render();
     });
-    search.addEventListener("input", render);
+    input.addEventListener("input", render);
+    form.addEventListener("submit", (e) => { e.preventDefault(); render(); $("#apps").scrollIntoView({ behavior: "smooth" }); });
+
+    const q = new URLSearchParams(location.search).get("q");
+    if (q) { input.value = q; }
     render();
+    if (q) $("#apps").scrollIntoView();
   }
 
-  /* ---------- Detail page ---------- */
+  /* ---------- Detail ---------- */
   function initDetail(apps) {
     const id = new URLSearchParams(location.search).get("id");
     const app = apps.find((a) => a.id === id);
     const root = $("#app-detail");
     if (!app) {
-      root.innerHTML = `<div class="empty"><h2>App not found</h2><p style="margin:12px 0 24px">The app you’re looking for doesn’t exist.</p><a class="btn btn-primary" href="index.html#apps">Browse apps</a></div>`;
+      root.innerHTML = `<div class="empty box" style="margin-top:40px"><h2>App not found</h2><p style="margin:10px 0 22px">The app you’re looking for doesn’t exist.</p><a class="btn btn-yellow" href="index.html#apps">Browse apps</a></div>`;
       return;
     }
     document.title = `${app.name} — Download APK | Arkan Apps`;
-    const md = document.querySelector('meta[name="description"]');
+    const md = $('meta[name="description"]');
     if (md) md.setAttribute("content", `${app.name}: ${app.tagline}. Download the latest APK (v${app.version}).`);
 
+    const more = apps.filter((a) => a.id !== app.id)
+      .sort((a, b) => (b.category === app.category) - (a.category === app.category))
+      .slice(0, 8);
+
     root.innerHTML = `
-      <div class="detail-head">
-        <img class="app-icon" src="${iconOf(app)}" alt="${esc(app.name)} icon" width="120" height="120">
+      <div class="crumbs"><a href="index.html">Home</a> / <a href="index.html?q=${encodeURIComponent(app.category)}">${esc(app.category)}</a> / ${esc(app.name)}</div>
+      <div class="d-head">
+        <img class="app-icon" src="${iconOf(app)}" alt="${esc(app.name)} icon" width="112" height="112">
         <div>
-          <div class="cat">${esc(app.category)}</div>
           <h1>${esc(app.name)}</h1>
-          <div class="tagline">${esc(app.tagline)}</div>
-          <div class="hero-actions" style="justify-content:flex-start">
-            ${downloadButton(app)}
-            <a class="btn btn-ghost" href="index.html#apps">All apps</a>
+          <a class="dev" href="https://github.com/${DEVELOPER}" target="_blank" rel="noopener">${DEVELOPER}</a>
+          <div class="sub">${esc(app.tagline)}</div>
+        </div>
+      </div>
+      <div class="d-stats box">
+        <div><strong>${esc(app.version)}</strong><small>Version</small></div>
+        <div><strong>${esc(app.size)}</strong><small>Size</small></div>
+        <div><strong>${esc(app.minAndroid)}+</strong><small>Android</small></div>
+        <div><strong>${formatDate(app.updated)}</strong><small>Updated</small></div>
+      </div>
+      <div class="d-actions">
+        ${installButton(app)}
+        <button class="btn" id="share-btn" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+          Share
+        </button>
+      </div>
+
+      <div class="shots">${shotsOf(app).map((s, i) => `<button class="shot box" type="button"><img src="${esc(s)}" alt="${esc(app.name)} screenshot ${i + 1}" loading="lazy"></button>`).join("")}</div>
+
+      <div class="d-grid">
+        <div class="d-col">
+          <div class="panel box">
+            <h2>About this app</h2>
+            <p>${esc(app.description)}</p>
+            <ul class="feature-list">${(app.features || []).map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
+            <div class="tags"><span class="chip">${esc(app.category)}</span></div>
+          </div>
+          <div class="panel box">
+            <h2>What’s new</h2>
+            <p><strong style="color:var(--text)">v${esc(app.version)}</strong> · ${formatDate(app.updated)}</p>
+            <p style="margin-top:6px">${esc(app.changelog)}</p>
+          </div>
+        </div>
+        <div class="d-col">
+          <div class="panel box">
+            <h2>App info</h2>
+            <table class="info-table">
+              <tr><td>Version</td><td>${esc(app.version)}</td></tr>
+              <tr><td>Size</td><td>${esc(app.size)}</td></tr>
+              <tr><td>Released</td><td>${formatDate(app.releaseDate)}</td></tr>
+              <tr><td>Updated</td><td>${formatDate(app.updated)}</td></tr>
+              <tr><td>Requires</td><td>Android ${esc(app.minAndroid)}+</td></tr>
+              <tr><td>Developer</td><td>${DEVELOPER}</td></tr>
+            </table>
+          </div>
+          <div class="panel box note">
+            <h2>How to install</h2>
+            <p>Download the APK, open it, and allow “Install unknown apps” for your browser if Android asks.</p>
           </div>
         </div>
       </div>
-      <div class="info-grid">
-        <div class="info"><small>Version</small><strong>${esc(app.version)}</strong></div>
-        <div class="info"><small>Size</small><strong>${esc(app.size)}</strong></div>
-        <div class="info"><small>Released</small><strong>${formatDate(app.releaseDate)}</strong></div>
-        <div class="info"><small>Updated</small><strong>${formatDate(app.updated)}</strong></div>
-        <div class="info"><small>Requires</small><strong>Android ${esc(app.minAndroid)}+</strong></div>
-      </div>
-      <h2 style="margin-bottom:16px">Screenshots</h2>
-      <div class="shots">${shotsOf(app).map((s, i) => `<div class="shot"><img src="${esc(s)}" alt="${esc(app.name)} screenshot ${i + 1}" loading="lazy"></div>`).join("")}</div>
-      <div class="two-col">
-        <div class="panel">
-          <h2>About this app</h2>
-          <p>${esc(app.description)}</p>
-          <h2 style="margin-top:22px">Features</h2>
-          <ul>${(app.features || []).map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
-        </div>
-        <div class="panel">
-          <h2>What’s new</h2>
-          <p><strong style="color:var(--text)">v${esc(app.version)}</strong> · ${formatDate(app.updated)}</p>
-          <p style="margin-top:8px">${esc(app.changelog)}</p>
-          <p class="notice">To install, allow “Install unknown apps” for your browser in Android settings, then open the downloaded APK.</p>
-        </div>
-      </div>`;
+
+      ${more.length ? `<section>
+        <div class="section-head"><h2>More apps</h2><div class="arrows"><button class="arrow" id="more-prev" aria-label="Scroll left">←</button><button class="arrow" id="more-next" aria-label="Scroll right">→</button></div></div>
+        <div class="rail" id="more-rail">${more.map(miniCard).join("")}</div>
+      </section>` : ""}`;
+
+    wireRail($("#more-rail"), $("#more-prev"), $("#more-next"));
+
+    $("#share-btn").addEventListener("click", async () => {
+      const data = { title: app.name, text: app.tagline, url: location.href };
+      try {
+        if (navigator.share) { await navigator.share(data); return; }
+        await navigator.clipboard.writeText(location.href);
+        toast("Link copied!");
+      } catch (e) { /* share cancelled */ }
+    });
 
     const lb = $("#lightbox");
-    const lbImg = $("#lightbox img");
-    root.querySelectorAll(".shot img").forEach((img) =>
-      img.addEventListener("click", () => { lbImg.src = img.src; lbImg.alt = img.alt; lb.classList.add("open"); })
+    const lbImg = $("img", lb);
+    $$(".shot img", root).forEach((img) =>
+      img.parentElement.addEventListener("click", () => { lbImg.src = img.src; lbImg.alt = img.alt; lb.classList.add("open"); })
     );
     lb.addEventListener("click", () => lb.classList.remove("open"));
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") lb.classList.remove("open"); });
@@ -197,7 +294,7 @@
     } catch (err) {
       console.error(err);
       const target = $("#app-grid") || $("#app-detail");
-      if (target) target.innerHTML = `<div class="empty">Couldn’t load the app catalogue. If you opened this file directly, run it through a local web server (see README).</div>`;
+      if (target) target.innerHTML = `<div class="empty box">Couldn’t load the app catalogue. If you opened this file directly, run it through a local web server (see README).</div>`;
     }
   });
 })();

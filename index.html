@@ -7,7 +7,7 @@
   <meta name="description" content="Arkan Apps: download free Android apps directly as APK files. Productivity, games, tools, photography and more — safe downloads hosted on GitHub Releases.">
   <meta name="keywords" content="Android apps, APK download, Arkan Apps, free Android apps">
   <meta name="author" content="Arkan17">
-  <meta name="theme-color" content="#0b0d14">
+  <meta name="theme-color" content="#fff8e7">
   <link rel="canonical" href="https://arkan17.github.io/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Arkan Apps — Download Android Apps">
@@ -18,83 +18,93 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"Arkan Apps","url":"https://arkan17.github.io/"}
+  {"@context":"https://schema.org","@type":"WebSite","name":"Arkan Apps","url":"https://arkan17.github.io/","potentialAction":{"@type":"SearchAction","target":"https://arkan17.github.io/?q={search_term_string}","query-input":"required name=search_term_string"}}
   </script>
 </head>
 <body data-page="home">
-  <header class="header">
-    <nav class="container nav">
-      <a class="logo" href="index.html"><img src="assets/favicon.svg" alt="" width="34" height="34"><span>Arkan <b>Apps</b></span></a>
+  <header class="topbar">
+    <div class="container bar">
+      <a class="logo" href="index.html"><img src="assets/favicon.svg" alt="" width="38" height="38"><span>Arkan Apps</span></a>
+      <form class="search" id="search-form" action="index.html" role="search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="search" name="q" type="search" placeholder="Search for apps" aria-label="Search apps" autocomplete="off">
+      </form>
       <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
       <ul class="nav-links">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="index.html#apps">Apps</a></li>
+        <li><a href="index.html" class="active">Apps</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="privacy.html">Privacy</a></li>
-        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
-    </nav>
+    </div>
   </header>
 
+  <nav class="tabs" aria-label="Categories">
+    <div class="container"><div class="chips" id="chips"></div></div>
+  </nav>
+
   <main>
-    <section class="hero">
+    <section class="hero" data-promo>
+      <div class="container hero-inner">
+        <div class="hero-card box">
+          <span class="tag">&#9889; Free APK downloads</span>
+          <h1>Android apps<br>made by <mark>Arkan</mark></h1>
+          <p>No store, no sign-up. Pick an app, hit install, and you’re done.</p>
+          <div class="hero-actions">
+            <a class="btn" href="#apps">Browse apps &rarr;</a>
+            <a class="btn" href="about.html" style="background:#fff">How it works</a>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat box"><strong id="stat-apps">10+</strong><span>Apps</span></div>
+          <div class="stat box"><strong id="stat-cats">—</strong><span>Categories</span></div>
+          <div class="stat box"><strong>100%</strong><span>Free</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section data-promo>
       <div class="container">
-        <span class="badge">&#9889; Free &amp; direct APK downloads</span>
-        <h1>Android apps, built with care by <span class="grad">Arkan</span></h1>
-        <p>Browse my collection of Android apps and download the latest APK directly — no store, no sign-up, no hassle.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#apps">Browse apps</a>
-          <a class="btn btn-ghost" href="about.html">Learn more</a>
+        <div class="section-head">
+          <h2>Featured</h2>
+          <div class="arrows"><button class="arrow" id="feat-prev" aria-label="Scroll left">&larr;</button><button class="arrow" id="feat-next" aria-label="Scroll right">&rarr;</button></div>
         </div>
-        <div class="stats">
-          <div class="stat"><strong id="stat-apps">10+</strong><span>Apps</span></div>
-          <div class="stat"><strong id="stat-cats">—</strong><span>Categories</span></div>
-          <div class="stat"><strong>100%</strong><span>Free</span></div>
-        </div>
+        <div class="rail" id="featured-rail"></div>
       </div>
     </section>
 
     <section id="apps">
       <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>App catalogue</h2>
-            <p>Search or filter by category to find what you need.</p>
-          </div>
-        </div>
-        <div class="toolbar">
-          <label class="search">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-            <input id="search" type="search" placeholder="Search apps…" aria-label="Search apps" autocomplete="off">
-          </label>
-          <div class="chips" id="chips" role="group" aria-label="Categories"></div>
-        </div>
-        <div class="grid" id="app-grid"><div class="empty">Loading apps…</div></div>
+        <div class="section-head"><h2 id="list-title">All apps</h2></div>
+        <div class="list" id="app-grid"><div class="empty box">Loading apps…</div></div>
       </div>
     </section>
 
-    <section>
+    <section data-promo>
       <div class="container">
-        <div class="features">
-          <div class="feature"><div class="ico">&#128737;</div><h3>Safe downloads</h3><p>Every APK is hosted on GitHub Releases, straight from the source.</p></div>
-          <div class="feature"><div class="ico">&#128640;</div><h3>Always up to date</h3><p>Version, size and release notes are listed for every app.</p></div>
-          <div class="feature"><div class="ico">&#128176;</div><h3>Completely free</h3><p>No accounts, no paywalls — just download and install.</p></div>
-          <div class="feature"><div class="ico">&#128241;</div><h3>Built for Android</h3><p>Optimised for phones and tablets running modern Android.</p></div>
+        <div class="section-head"><h2>Why Arkan Apps</h2></div>
+        <div class="why">
+          <div class="box press"><div class="ico" style="background:var(--green)">&#128737;</div><h3>Safe downloads</h3><p>Every APK comes straight from GitHub Releases.</p></div>
+          <div class="box press"><div class="ico" style="background:var(--yellow)">&#128640;</div><h3>Always fresh</h3><p>Version, size and release notes on every app page.</p></div>
+          <div class="box press"><div class="ico" style="background:var(--pink)">&#128176;</div><h3>Totally free</h3><p>No accounts, no paywalls. Download and install.</p></div>
+          <div class="box press"><div class="ico" style="background:var(--blue)">&#128241;</div><h3>Built for Android</h3><p>Made for modern Android phones and tablets.</p></div>
         </div>
       </div>
     </section>
 
     <section id="contact">
       <div class="container">
-        <div class="contact-box">
-          <h2>Get in touch</h2>
-          <p>Found a bug, have a feature idea, or want to collaborate? Reach out on GitHub.</p>
+        <div class="cta box">
+          <div>
+            <h2>Found a bug? Got an idea?</h2>
+            <p>Reach out on GitHub. Feedback makes the apps better.</p>
+          </div>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="https://github.com/Arkan17" target="_blank" rel="noopener">GitHub profile</a>
-            <a class="btn btn-ghost" href="https://github.com/Arkan17/arkan17.github.io/issues" target="_blank" rel="noopener">Report an issue</a>
+            <a class="btn btn-yellow" href="https://github.com/Arkan17" target="_blank" rel="noopener">GitHub profile</a>
+            <a class="btn" href="https://github.com/Arkan17/arkan17.github.io/issues" target="_blank" rel="noopener" style="background:#fff">Report an issue</a>
           </div>
         </div>
       </div>
@@ -103,7 +113,7 @@
 
   <footer class="footer">
     <div class="container">
-      <span>&copy; <span id="year"></span> Arkan Apps. All rights reserved.</span>
+      <span>&copy; <span id="year"></span> Arkan Apps</span>
       <nav><a href="about.html">About</a><a href="privacy.html">Privacy Policy</a><a href="index.html#contact">Contact</a></nav>
     </div>
   </footer>

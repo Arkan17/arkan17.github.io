@@ -5,35 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About | Arkan Apps</title>
   <meta name="description" content="About Arkan Apps — a collection of free Android apps by Arkan17, distributed as direct APK downloads.">
-  <meta name="theme-color" content="#0b0d14">
+  <meta name="theme-color" content="#fff8e7">
   <link rel="canonical" href="https://arkan17.github.io/about.html">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="about">
-  <header class="header">
-    <nav class="container nav">
-      <a class="logo" href="index.html"><img src="assets/favicon.svg" alt="" width="34" height="34"><span>Arkan <b>Apps</b></span></a>
+  <header class="topbar">
+    <div class="container bar">
+      <a class="logo" href="index.html"><img src="assets/favicon.svg" alt="" width="38" height="38"><span>Arkan Apps</span></a>
+      <form class="search" action="index.html" role="search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input name="q" type="search" placeholder="Search for apps" aria-label="Search apps" autocomplete="off">
+      </form>
       <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="index.html#apps">Apps</a></li>
+        <li><a href="index.html">Apps</a></li>
         <li><a href="about.html" class="active">About</a></li>
         <li><a href="privacy.html">Privacy</a></li>
         <li><a href="index.html#contact">Contact</a></li>
       </ul>
-    </nav>
+    </div>
   </header>
 
-  <main class="container prose">
+  <main class="container prose"><div class="box">
     <h1>About Arkan Apps</h1>
     <p>Arkan Apps is the home of Android applications developed by <a href="https://github.com/Arkan17" target="_blank" rel="noopener">Arkan17</a>. Instead of going through an app store, you can download each app directly as an APK file.</p>
 
     <h2>How downloads work</h2>
-    <p>All APK files are published through <strong>GitHub Releases</strong>. When you press “Download APK”, the file comes straight from GitHub’s servers — this website never stores or modifies the files.</p>
+    <p>All APK files are published through <strong>GitHub Releases</strong>. When you press “Install APK”, the file comes straight from GitHub’s servers — this website never stores or modifies the files.</p>
 
     <h2>Installing an APK</h2>
     <ul>
@@ -48,11 +51,11 @@
 
     <h2>Feedback</h2>
     <p>Bug reports and feature requests are welcome — see the <a href="index.html#contact">contact section</a>.</p>
-  </main>
+  </div></main>
 
   <footer class="footer">
     <div class="container">
-      <span>&copy; <span id="year"></span> Arkan Apps. All rights reserved.</span>
+      <span>&copy; <span id="year"></span> Arkan Apps</span>
       <nav><a href="about.html">About</a><a href="privacy.html">Privacy Policy</a><a href="index.html#contact">Contact</a></nav>
     </div>
   </footer>
