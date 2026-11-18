@@ -252,6 +252,30 @@ section { padding: 36px 0; }
   .d-actions .btn-install { flex: 1; min-width: 0; }
   .shot { width: 160px; }
   .cta { padding: 28px 22px; }
+  .cta .hero-actions { width: 100%; }
+  section { padding: 24px 0; }
+  .hero-actions .btn { flex: 1; }
+  .hero-stats { gap: 12px; }
+  .stat strong { font-size: 1.4rem; }
+  .feat { flex-basis: 88%; }
+  .feat-banner { height: 140px; }
+  /* App stats: 2x2 grid instead of sideways scroll */
+  .d-stats { display: grid; grid-template-columns: 1fr 1fr; }
+  .d-stats > div { border-right: 0; }
+  .d-stats > div:nth-child(odd) { border-right: var(--bw) solid var(--line); }
+  .d-stats > div:nth-child(-n+2) { border-bottom: var(--bw) solid var(--line); }
+  .panel { padding: 20px; }
+  .info-table td { font-size: .92rem; }
+}
+@media (max-width: 380px) {
+  :root { --sh: 4px; }
+  .logo span { font-size: 1.1rem; }
+  .hero-card h1 { font-size: 1.9rem; }
+  .stat { padding: 12px 10px; }
+  .stat span { font-size: .8rem; }
+  .row { padding: 12px; gap: 10px; }
+  .app-icon { width: 56px; height: 56px; }
+  .d-actions .btn { padding: 12px 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
