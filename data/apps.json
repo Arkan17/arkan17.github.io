@@ -1,4 +1,43 @@
 {
   "_readme": "Edit this file to add or update apps. downloadUrl should point to an APK attached to a GitHub Release, e.g. https://github.com/Arkan17/<repo>/releases/download/<tag>/<file>.apk. Leave it empty to show 'Coming soon'. icon and screenshots can be image paths/URLs; leave them empty to use generated placeholders.",
-  "apps": []
+  "apps": [
+    {
+      "id": "ummati",
+      "name": "Ummati",
+      "tagline": "An App That Every Muslim Needs",
+      "category": "Islamic prayer",
+      "description": "Ummati is your all-in-one Islamic companion, thoughtfully designed to make everyday Islamic practices easier and keep you connected with your faith. From reading the Holy Quran and finding the Qibla direction to tracking your daily Dhikr with Digital Tasbih, checking accurate prayer times and discovering nearby mosques, Ummati brings essential Islamic tools together in one convenient place.\n\nWhether you are at home, travelling or on the go, Ummati helps you stay connected to your Islamic routine and strengthen your spiritual journey.\n\nOne app. Everything you need for your daily Islamic life.\n\n**Ummati – Your Faith, Always With You.**",
+      "features": [
+        "Holy Quran – Read and explore the Holy Quran",
+        "Qibla Compass – Find the direction of the Holy Kaaba",
+        "Digital Tasbih – Keep track of your daily Dhikr",
+        "Prayer Times – Stay updated with daily Salah timings",
+        "Mosque Finder – Discover nearby mosques",
+        "Islamic Tools – Essential features for everyday Muslim life",
+        "Simple and User-Friendly Interface",
+        "All-in-One Islamic Companion"
+      ],
+      "version": "1.0.0",
+      "size": "89 MB",
+      "releaseDate": "2026-11-18",
+      "updated": "2026-11-18",
+      "minAndroid": "8.0",
+      "changelog": "Initial Release of Ummati!\n\n- Introducing your all-in-one Islamic companion.\n- Access the Holy Quran anytime.\n- Find the Qibla direction with ease.\n- Keep track of your Dhikr using Digital Tasbih.\n- Check daily prayer timings.\n- Discover nearby mosques.\n- Enjoy a simple and user-friendly experience.\n\nMore features and improvements coming soon, In Sha Allah!",
+      "color": "#9dff4d",
+      "icon": "assets/apps/ummati/icon-mwm1di25.webp",
+      "screenshots": [
+        "assets/apps/ummati/shot-mwm1di25-1.webp",
+        "assets/apps/ummati/shot-mwm1di25-2.webp",
+        "assets/apps/ummati/shot-mwm1di25-3.webp",
+        "assets/apps/ummati/shot-mwm1di25-4.webp",
+        "assets/apps/ummati/shot-mwm1di25-5.webp",
+        "assets/apps/ummati/shot-mwm1di25-6.webp",
+        "assets/apps/ummati/shot-mwm1di25-7.webp",
+        "assets/apps/ummati/shot-mwm1di25-8.webp",
+        "assets/apps/ummati/shot-mwm1di25-9.webp"
+      ],
+      "downloadUrl": "https://github.com/Arkan17/arkan17.github.io/releases/download/ummati-v1.0.0/Ummati-1.0.0.apk",
+      "featured": true
+    }
+  ]
 }
