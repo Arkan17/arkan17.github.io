@@ -161,6 +161,15 @@
     const sha256 = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", await file.arrayBuffer())))
       .map((b) => b.toString(16).padStart(2, "0")).join("");
 
+    const url = `https://github.com/${OWNER}/${REPO}/releases/download/${tag}/${fileName}`;
+    const rel = await gh(`${REPO_PATH}/releases/tags/${encodeURIComponent(tag)}`, { allow404: true }).catch(() => null);
+    const same = rel && rel.assets.find((a) => a.name === fileName && a.state === "uploaded" && a.size === file.size && (!a.digest || a.digest === "sha256:" + sha256));
+    if (same) {
+      onProgress(1);
+      log("This exact APK is already published, skipping upload ✓");
+      return { tag, fileName, url, alreadyLive: true };
+    }
+
     const parts = Math.max(1, Math.ceil(file.size / CHUNK));
     const tree = [];
     for (let i = 0; i < parts; i++) {
@@ -181,7 +190,7 @@
     const commit = await gh(`${REPO_PATH}/git/commits`, { method: "POST", body: { message: `APK upload: ${app.name} v${app.version}`, tree: newTree.sha, parents: [ref.object.sha] } });
     await gh(`${REPO_PATH}/git/refs`, { method: "POST", body: { ref: `refs/heads/apk-upload/${app.id}-${Date.now()}`, sha: commit.sha } });
 
-    return { tag, fileName, url: `https://github.com/${OWNER}/${REPO}/releases/download/${tag}/${fileName}` };
+    return { tag, fileName, url };
   }
 
   async function waitForRelease(tag, fileName, size, since, log) {
@@ -197,8 +206,27 @@
   }
 
   /* ---------- Image processing ---------- */
+  async function decodeImage(file) {
+    try {
+      return await createImageBitmap(file);
+    } catch (e) {
+      const url = URL.createObjectURL(file);
+      try {
+        const img = new Image();
+        img.src = url;
+        await img.decode();
+        if (!img.naturalWidth) { img.width = 512; img.height = 512; }
+        return img;
+      } catch (e2) {
+        throw new Error(`Can’t read image “${file.name}”. Please use PNG, JPG or WebP (iPhone HEIC photos must be converted first).`);
+      } finally {
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+    }
+  }
+
   async function toWebp(file, maxW, maxH, quality) {
-    const bmp = await createImageBitmap(file);
+    const bmp = await decodeImage(file);
     const scale = Math.min(1, maxW / bmp.width, maxH / bmp.height);
     const canvas = document.createElement("canvas");
     canvas.width = Math.round(bmp.width * scale);
@@ -463,14 +491,26 @@
     F("size").value = fmtMB(f.size);
     renderApk();
   });
-  setupDrop("drop-icon", "in-icon", (files) => {
-    const f = files.find((x) => x.type.startsWith("image/"));
-    if (!f) return toast("Please choose an image");
-    iconItem = { file: f }; renderIcon();
+  // Keep only images the browser can actually decode; report the rest by name.
+  async function readableImages(files) {
+    const ok = [], bad = [];
+    for (const f of files) {
+      try { await decodeImage(f); ok.push(f); } catch (e) { bad.push(f.name); }
+    }
+    if (bad.length) {
+      $("#form-error").textContent = `Can’t read: ${bad.join(", ")}. Use PNG, JPG or WebP (convert HEIC/iPhone photos first).`;
+    } else {
+      $("#form-error").textContent = "";
+    }
+    return ok;
+  }
+  setupDrop("drop-icon", "in-icon", async (files) => {
+    const [f] = await readableImages(files.slice(0, 1));
+    if (f) { iconItem = { file: f }; renderIcon(); }
   });
-  setupDrop("drop-shots", "in-shots", (files) => {
-    const imgs = files.filter((x) => x.type.startsWith("image/"));
-    if (!imgs.length) return toast("Please choose images");
+  setupDrop("drop-shots", "in-shots", async (files) => {
+    const imgs = await readableImages(files);
+    if (!imgs.length) return;
     shots.push(...imgs.map((file) => ({ file })));
     renderShots();
   });
@@ -534,13 +574,6 @@
 
     try {
       const started = Date.now();
-      let apk = null;
-      if (apkFile) {
-        log("Uploading APK to GitHub…");
-        apk = await uploadApk(app, apkFile, (f) => setBar(f * 0.8), log);
-        app.downloadUrl = apk.url;
-      }
-
       log("Processing images…");
       const dir = `assets/apps/${app.id}`;
       const stamp = Date.now().toString(36);
@@ -561,6 +594,15 @@
           app.screenshots.push(p);
         } else app.screenshots.push(s.path);
       }
+      setBar(0.1);
+
+      let apk = null;
+      if (apkFile) {
+        log("Uploading APK to GitHub…");
+        apk = await uploadApk(app, apkFile, (f) => setBar(0.1 + f * 0.75), log);
+        app.downloadUrl = apk.url;
+      }
+
       setBar(apk ? 0.85 : 0.4);
 
       log("Saving app details…");
@@ -577,7 +619,7 @@
       setBar(apk ? 0.9 : 1);
       log(`Website updated ✓ (live in about a minute)`);
 
-      if (apk) {
+      if (apk && !apk.alreadyLive) {
         log("Publishing APK to GitHub Releases (about 1 minute)…");
         const ok = await waitForRelease(apk.tag, apk.fileName, apkFile.size, started, log);
         if (ok) log(`APK is live ✓ <a href="${esc(apk.url)}" target="_blank" rel="noopener">${esc(apk.fileName)}</a>`);
