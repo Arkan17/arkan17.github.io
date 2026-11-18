@@ -1,30 +1,4 @@
 {
   "_readme": "Edit this file to add or update apps. downloadUrl should point to an APK attached to a GitHub Release, e.g. https://github.com/Arkan17/<repo>/releases/download/<tag>/<file>.apk. Leave it empty to show 'Coming soon'. icon and screenshots can be image paths/URLs; leave them empty to use generated placeholders.",
-  "apps": [
-    {
-      "id": "weather-now",
-      "name": "WeatherNow",
-      "tagline": "Accurate forecasts at a glance",
-      "category": "Tools",
-      "description": "WeatherNow shows hourly and 7-day forecasts, rain alerts and air quality with a clean, animated interface.",
-      "features": [
-        "Hourly forecast",
-        "7-day outlook",
-        "Rain alerts",
-        "Air quality",
-        "Home-screen widget"
-      ],
-      "version": "1.2.1",
-      "size": "63 MB",
-      "releaseDate": "2026-03-22",
-      "updated": "2026-10-18",
-      "minAndroid": "8.0",
-      "changelog": "Air quality index added.",
-      "color": "#0ea5e9",
-      "icon": "",
-      "screenshots": [],
-      "downloadUrl": "",
-      "featured": false
-    }
-  ]
+  "apps": []
 }
