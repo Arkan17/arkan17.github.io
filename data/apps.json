@@ -2,31 +2,6 @@
   "_readme": "Edit this file to add or update apps. downloadUrl should point to an APK attached to a GitHub Release, e.g. https://github.com/Arkan17/<repo>/releases/download/<tag>/<file>.apk. Leave it empty to show 'Coming soon'. icon and screenshots can be image paths/URLs; leave them empty to use generated placeholders.",
   "apps": [
     {
-      "id": "beat-box",
-      "name": "BeatBox",
-      "tagline": "Offline music player with equalizer",
-      "category": "Music & Audio",
-      "description": "BeatBox plays your local music with a 10-band equalizer, playlists, sleep timer and a beautiful now-playing screen.",
-      "features": [
-        "10-band equalizer",
-        "Playlists",
-        "Sleep timer",
-        "Lyrics view",
-        "Widget support"
-      ],
-      "version": "2.0.0",
-      "size": "66 MB",
-      "releaseDate": "2025-06-18",
-      "updated": "2026-07-22",
-      "minAndroid": "8.0",
-      "changelog": "Redesigned player and new widget.",
-      "color": "#ef4444",
-      "icon": "",
-      "screenshots": [],
-      "downloadUrl": "",
-      "featured": true
-    },
-    {
       "id": "word-learn",
       "name": "WordLearn",
       "tagline": "Build your vocabulary daily",
