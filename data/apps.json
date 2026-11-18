@@ -2,31 +2,6 @@
   "_readme": "Edit this file to add or update apps. downloadUrl should point to an APK attached to a GitHub Release, e.g. https://github.com/Arkan17/<repo>/releases/download/<tag>/<file>.apk. Leave it empty to show 'Coming soon'. icon and screenshots can be image paths/URLs; leave them empty to use generated placeholders.",
   "apps": [
     {
-      "id": "budget-buddy",
-      "name": "Budget Buddy",
-      "tagline": "Track expenses and plan your budget",
-      "category": "Finance",
-      "description": "Budget Buddy helps you log expenses in seconds, set monthly budgets per category and see where your money goes with clear charts.",
-      "features": [
-        "Fast expense entry",
-        "Category budgets",
-        "Monthly charts",
-        "CSV export",
-        "PIN lock"
-      ],
-      "version": "1.4.2",
-      "size": "61 MB",
-      "releaseDate": "2025-11-03",
-      "updated": "2026-08-28",
-      "minAndroid": "8.0",
-      "changelog": "Added CSV export and PIN lock.",
-      "color": "#22c55e",
-      "icon": "",
-      "screenshots": [],
-      "downloadUrl": "",
-      "featured": false
-    },
-    {
       "id": "quiz-master",
       "name": "Quiz Master",
       "tagline": "Thousands of fun trivia questions",
