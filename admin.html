@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | Arkan Apps</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#fff8e7">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-page="admin">
+  <header class="topbar">
+    <div class="container bar admin-bar">
+      <a class="logo" href="index.html"><img src="assets/favicon.svg" alt="" width="38" height="38"><span>Arkan Admin</span></a>
+      <div class="admin-actions" id="top-actions" hidden>
+        <a class="btn" href="index.html" target="_blank" rel="noopener">View site</a>
+        <button class="btn" id="logout-btn" type="button">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin">
+
+    <!-- ========== First-time setup ========== -->
+    <section id="view-setup" class="view" hidden>
+      <div class="box auth">
+        <h1>Admin setup</h1>
+        <p class="muted">One-time setup on this device. Connect your GitHub account with a token, then choose an admin password.</p>
+
+        <details class="help box">
+          <summary>How do I get a GitHub token?</summary>
+          <ol>
+            <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Fine-grained token</a> (logged in as <b>Arkan17</b>).</li>
+            <li><b>Token name:</b> Arkan Admin. <b>Expiration:</b> 1 year (or your choice).</li>
+            <li><b>Repository access:</b> “Only select repositories” → <code>arkan17.github.io</code>.</li>
+            <li><b>Permissions → Repository permissions → Contents:</b> “Read and write”.</li>
+            <li>Click <b>Generate token</b>, copy it, and paste it below.</li>
+          </ol>
+          <p class="muted">The token is encrypted with your admin password and saved only in this browser. It is never sent anywhere except GitHub.</p>
+        </details>
+
+        <form id="setup-form" class="form">
+          <label>GitHub token<input id="setup-token" type="password" autocomplete="off" required placeholder="github_pat_…"></label>
+          <label>Admin password<input id="setup-pass" type="password" autocomplete="new-password" required minlength="6"></label>
+          <label>Confirm password<input id="setup-pass2" type="password" autocomplete="new-password" required minlength="6"></label>
+          <p class="error" id="setup-error" role="alert"></p>
+          <button class="btn btn-install" type="submit">Connect &amp; login</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ========== Login ========== -->
+    <section id="view-login" class="view" hidden>
+      <div class="box auth">
+        <h1>Arkan admin login</h1>
+        <form id="login-form" class="form">
+          <label>Admin password<input id="login-pass" type="password" autocomplete="current-password" required autofocus></label>
+          <p class="error" id="login-error" role="alert"></p>
+          <button class="btn btn-install" type="submit">Login</button>
+        </form>
+        <button class="linkish" id="reset-btn" type="button">Forgot password / use a different token</button>
+      </div>
+    </section>
+
+    <!-- ========== Dashboard ========== -->
+    <section id="view-dash" class="view" hidden>
+      <div class="dash-head">
+        <div>
+          <h1>Your apps</h1>
+          <p class="muted" id="dash-sub">Loading…</p>
+        </div>
+        <button class="btn btn-install" id="add-btn" type="button">+ Add new app</button>
+      </div>
+      <div class="admin-list" id="admin-list"></div>
+    </section>
+
+    <!-- ========== Add / edit form ========== -->
+    <section id="view-form" class="view" hidden>
+      <div class="dash-head">
+        <div>
+          <button class="linkish" id="back-btn" type="button">&larr; Back to apps</button>
+          <h1 id="form-title">Add new app</h1>
+        </div>
+      </div>
+
+      <form id="app-form" class="app-form" novalidate>
+        <div class="form-grid">
+          <div class="box panel">
+            <h2>APK file</h2>
+            <div class="drop" id="drop-apk" tabindex="0" role="button" aria-label="Choose APK file">
+              <input type="file" id="in-apk" accept=".apk,application/vnd.android.package-archive" hidden>
+              <strong>Drag &amp; drop APK here</strong><span>or click to choose</span>
+            </div>
+            <div class="file-info" id="apk-info"></div>
+          </div>
+
+          <div class="box panel">
+            <h2>App icon</h2>
+            <div class="icon-row">
+              <img id="icon-preview" class="app-icon icon-big" alt="" hidden>
+              <div class="drop drop-small" id="drop-icon" tabindex="0" role="button" aria-label="Choose icon">
+                <input type="file" id="in-icon" accept="image/*" hidden>
+                <strong>Drop icon</strong><span>square PNG/JPG</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="box panel">
+          <h2>Details</h2>
+          <div class="fields">
+            <label>App name *<input id="f-name" required maxlength="60"></label>
+            <label>App ID (URL) *<input id="f-id" required pattern="[a-z0-9-]+" maxlength="50" placeholder="auto from name"></label>
+            <label class="span2">Tagline (one line) *<input id="f-tagline" required maxlength="90"></label>
+            <label>Category *<input id="f-category" required list="cat-list" maxlength="40"><datalist id="cat-list"></datalist></label>
+            <label>Version *<input id="f-version" required placeholder="1.0.0" maxlength="20"></label>
+            <label>Size<input id="f-size" placeholder="auto from APK" maxlength="20"></label>
+            <label>Min Android<input id="f-minAndroid" value="8.0" maxlength="10"></label>
+            <label>Release date<input id="f-releaseDate" type="date"></label>
+            <label>Accent colour<input id="f-color" type="color" value="#4d7cff"></label>
+            <label class="span2">Description *<textarea id="f-description" rows="5" required></textarea></label>
+            <label class="span2">Features (one per line)<textarea id="f-features" rows="5"></textarea></label>
+            <label class="span2">What’s new (changelog)<textarea id="f-changelog" rows="3"></textarea></label>
+            <label class="check span2"><input id="f-featured" type="checkbox"> Show in “Featured”</label>
+          </div>
+        </div>
+
+        <div class="box panel">
+          <h2>Screenshots</h2>
+          <div class="drop" id="drop-shots" tabindex="0" role="button" aria-label="Add screenshots">
+            <input type="file" id="in-shots" accept="image/*" multiple hidden>
+            <strong>Drag &amp; drop screenshots</strong><span>or click to choose (multiple allowed)</span>
+          </div>
+          <div class="shot-list" id="shot-list"></div>
+        </div>
+
+        <p class="error" id="form-error" role="alert"></p>
+        <div class="publish-bar">
+          <button class="btn btn-install" id="publish-btn" type="submit">Publish to website</button>
+        </div>
+      </form>
+
+      <div class="box panel progress" id="progress" hidden>
+        <h2>Publishing…</h2>
+        <div class="bar-track"><div class="bar-fill" id="bar-fill"></div></div>
+        <ol class="log" id="log"></ol>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="js/admin.js"></script>
+</body>
+</html>

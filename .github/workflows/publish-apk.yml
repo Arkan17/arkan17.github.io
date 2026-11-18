@@ -1,0 +1,56 @@
+# Publishes APKs uploaded from the admin panel (admin.html).
+# The admin panel pushes the APK in chunks to a temporary branch "apk-upload/...".
+# This workflow joins the chunks, publishes the APK to a GitHub Release, then deletes the branch.
+name: Publish APK
+
+on:
+  push:
+    branches: ["apk-upload/**"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble APK and publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd _apk_upload
+          TAG=$(jq -r .tag manifest.json)
+          FILE=$(jq -r .fileName manifest.json)
+          TITLE=$(jq -r .title manifest.json)
+          SIZE=$(jq -r .size manifest.json)
+          SHA=$(jq -r .sha256 manifest.json)
+          jq -r .notes manifest.json > ../notes.md
+
+          # Basic safety checks on names coming from the manifest
+          [[ "$TAG" =~ ^[a-z0-9-]+-v[0-9A-Za-z._]+$ ]] || { echo "Bad tag: $TAG"; exit 1; }
+          [[ "$FILE" =~ ^[A-Za-z0-9._-]+\.apk$ ]] || { echo "Bad file name: $FILE"; exit 1; }
+
+          cat $(ls part-* | sort) > "../$FILE"
+          cd ..
+          ACTUAL_SIZE=$(stat -c%s "$FILE")
+          ACTUAL_SHA=$(sha256sum "$FILE" | cut -d' ' -f1)
+          [ "$ACTUAL_SIZE" = "$SIZE" ] || { echo "Size mismatch: $ACTUAL_SIZE vs $SIZE"; exit 1; }
+          [ "$ACTUAL_SHA" = "$SHA" ] || { echo "Checksum mismatch"; exit 1; }
+          echo "APK verified: $FILE ($ACTUAL_SIZE bytes)"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$FILE" --clobber
+            gh release edit "$TAG" --title "$TITLE" --notes-file notes.md
+          else
+            gh release create "$TAG" "$FILE" --title "$TITLE" --notes-file notes.md --target main
+          fi
+
+      - name: Delete temporary upload branch
+        run: git push origin --delete "${GITHUB_REF_NAME}"
