@@ -2,31 +2,6 @@
   "_readme": "Edit this file to add or update apps. downloadUrl should point to an APK attached to a GitHub Release, e.g. https://github.com/Arkan17/<repo>/releases/download/<tag>/<file>.apk. Leave it empty to show 'Coming soon'. icon and screenshots can be image paths/URLs; leave them empty to use generated placeholders.",
   "apps": [
     {
-      "id": "fit-track",
-      "name": "FitTrack",
-      "tagline": "Workouts, steps and progress in one place",
-      "category": "Health & Fitness",
-      "description": "FitTrack logs workouts, counts steps and visualises your progress over time with simple goal tracking.",
-      "features": [
-        "Workout logger",
-        "Step counter",
-        "Goal tracking",
-        "Progress charts",
-        "Rest timer"
-      ],
-      "version": "1.2.0",
-      "size": "70 MB",
-      "releaseDate": "2026-02-01",
-      "updated": "2026-09-30",
-      "minAndroid": "9.0",
-      "changelog": "Added rest timer.",
-      "color": "#06b6d4",
-      "icon": "",
-      "screenshots": [],
-      "downloadUrl": "",
-      "featured": false
-    },
-    {
       "id": "note-vault",
       "name": "NoteVault",
       "tagline": "Private, encrypted notes",
