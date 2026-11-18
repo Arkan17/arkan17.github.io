@@ -2,31 +2,6 @@
   "_readme": "Edit this file to add or update apps. downloadUrl should point to an APK attached to a GitHub Release, e.g. https://github.com/Arkan17/<repo>/releases/download/<tag>/<file>.apk. Leave it empty to show 'Coming soon'. icon and screenshots can be image paths/URLs; leave them empty to use generated placeholders.",
   "apps": [
     {
-      "id": "note-vault",
-      "name": "NoteVault",
-      "tagline": "Private, encrypted notes",
-      "category": "Productivity",
-      "description": "NoteVault stores your notes locally with encryption, folders, checklists and markdown formatting.",
-      "features": [
-        "Encrypted storage",
-        "Folders and tags",
-        "Markdown support",
-        "Checklists",
-        "Biometric unlock"
-      ],
-      "version": "1.1.0",
-      "size": "54 MB",
-      "releaseDate": "2026-04-12",
-      "updated": "2026-10-05",
-      "minAndroid": "8.0",
-      "changelog": "Biometric unlock support.",
-      "color": "#8b5cf6",
-      "icon": "",
-      "screenshots": [],
-      "downloadUrl": "",
-      "featured": false
-    },
-    {
       "id": "beat-box",
       "name": "BeatBox",
       "tagline": "Offline music player with equalizer",
