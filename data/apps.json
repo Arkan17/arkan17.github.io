@@ -2,31 +2,6 @@
   "_readme": "Edit this file to add or update apps. downloadUrl should point to an APK attached to a GitHub Release, e.g. https://github.com/Arkan17/<repo>/releases/download/<tag>/<file>.apk. Leave it empty to show 'Coming soon'. icon and screenshots can be image paths/URLs; leave them empty to use generated placeholders.",
   "apps": [
     {
-      "id": "pixel-studio",
-      "name": "Pixel Studio",
-      "tagline": "Edit photos with pro-grade filters",
-      "category": "Photography",
-      "description": "Pixel Studio is a lightweight photo editor with filters, crop, curves, text overlays and one-tap enhance.",
-      "features": [
-        "40+ filters",
-        "Curves and HSL",
-        "Text and stickers",
-        "One-tap enhance",
-        "Export in full resolution"
-      ],
-      "version": "2.1.0",
-      "size": "88 MB",
-      "releaseDate": "2025-08-20",
-      "updated": "2026-09-14",
-      "minAndroid": "9.0",
-      "changelog": "New curves editor and faster exports.",
-      "color": "#ff5c8a",
-      "icon": "",
-      "screenshots": [],
-      "downloadUrl": "",
-      "featured": true
-    },
-    {
       "id": "budget-buddy",
       "name": "Budget Buddy",
       "tagline": "Track expenses and plan your budget",
