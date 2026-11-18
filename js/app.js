@@ -141,6 +141,7 @@
       const q = input.value.trim().toLowerCase();
       const filtering = q || activeCat !== "All";
       promo.forEach((el) => (el.hidden = !!filtering));
+      if (!apps.length) $("#featured-sec").hidden = true;
       listTitle.textContent = q ? `Results for “${input.value.trim()}”` : activeCat !== "All" ? activeCat : "All apps";
 
       const items = apps.filter((a) => {
@@ -149,7 +150,7 @@
         return inCat && (!q || hay.includes(q));
       });
       if (!items.length) {
-        list.innerHTML = `<div class="empty box">No apps found. Try another search.</div>`;
+        list.innerHTML = `<div class="empty box">${apps.length ? "No apps found. Try another search." : "New apps are coming soon. Check back shortly!"}</div>`;
         return;
       }
       list.innerHTML = items.map((a, i) => `
