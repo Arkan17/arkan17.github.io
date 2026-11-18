@@ -2,31 +2,6 @@
   "_readme": "Edit this file to add or update apps. downloadUrl should point to an APK attached to a GitHub Release, e.g. https://github.com/Arkan17/<repo>/releases/download/<tag>/<file>.apk. Leave it empty to show 'Coming soon'. icon and screenshots can be image paths/URLs; leave them empty to use generated placeholders.",
   "apps": [
     {
-      "id": "quiz-master",
-      "name": "Quiz Master",
-      "tagline": "Thousands of fun trivia questions",
-      "category": "Games",
-      "description": "Challenge yourself with trivia across science, history, sports and movies. Play solo or pass-and-play with friends.",
-      "features": [
-        "5,000+ questions",
-        "10 categories",
-        "Pass-and-play mode",
-        "Daily challenge",
-        "Leaderboard"
-      ],
-      "version": "3.0.1",
-      "size": "95 MB",
-      "releaseDate": "2025-03-10",
-      "updated": "2026-10-20",
-      "minAndroid": "8.0",
-      "changelog": "Daily challenge mode and bug fixes.",
-      "color": "#f59e0b",
-      "icon": "",
-      "screenshots": [],
-      "downloadUrl": "",
-      "featured": true
-    },
-    {
       "id": "fit-track",
       "name": "FitTrack",
       "tagline": "Workouts, steps and progress in one place",
