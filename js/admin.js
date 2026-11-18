@@ -213,6 +213,12 @@
   async function verifyToken(token) {
     const repo = await gh(REPO_PATH, { token });
     if (repo.permissions && repo.permissions.push === false) throw new Error("This token can’t write to the repository.");
+    // Real write test: create a tiny unreferenced blob (harmless, changes nothing on the site)
+    try {
+      await gh(`${REPO_PATH}/git/blobs`, { method: "POST", token, body: { content: "arkan-admin-check", encoding: "utf-8" } });
+    } catch (e) {
+      throw new Error("Token works but has no write access. Edit the token on GitHub → Repository permissions → add “Contents” → set “Read and write” → Update.");
+    }
     return repo;
   }
 
@@ -254,6 +260,13 @@
       return;
     }
     $("#login-pass").value = "";
+    try {
+      await verifyToken(TOKEN);
+    } catch (ex) {
+      TOKEN = null;
+      err.textContent = ex.message;
+      return;
+    }
     openDashboard();
   });
 
