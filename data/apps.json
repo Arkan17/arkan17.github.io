@@ -2,31 +2,18 @@
   "_readme": "Edit this file to add or update apps. downloadUrl should point to an APK attached to a GitHub Release, e.g. https://github.com/Arkan17/<repo>/releases/download/<tag>/<file>.apk. Leave it empty to show 'Coming soon'. icon and screenshots can be image paths/URLs; leave them empty to use generated placeholders.",
   "apps": [
     {
-      "id": "task-flow",
-      "name": "TaskFlow",
-      "tagline": "Simple, fast to-do lists and reminders",
-      "category": "Productivity",
-      "description": "TaskFlow keeps your day organised with quick-add tasks, smart reminders, recurring to-dos and a clean focus mode. Works fully offline.",
-      "features": ["Quick-add tasks with due dates", "Recurring reminders", "Focus mode with timer", "Dark and light themes", "Works offline"],
-      "version": "1.0.0",
-      "size": "52 MB",
-      "releaseDate": "2026-01-15",
-      "updated": "2026-10-02",
-      "minAndroid": "8.0",
-      "changelog": "Initial public release.",
-      "color": "#7c5cff",
-      "icon": "",
-      "screenshots": [],
-      "downloadUrl": "",
-      "featured": true
-    },
-    {
       "id": "pixel-studio",
       "name": "Pixel Studio",
       "tagline": "Edit photos with pro-grade filters",
       "category": "Photography",
       "description": "Pixel Studio is a lightweight photo editor with filters, crop, curves, text overlays and one-tap enhance.",
-      "features": ["40+ filters", "Curves and HSL", "Text and stickers", "One-tap enhance", "Export in full resolution"],
+      "features": [
+        "40+ filters",
+        "Curves and HSL",
+        "Text and stickers",
+        "One-tap enhance",
+        "Export in full resolution"
+      ],
       "version": "2.1.0",
       "size": "88 MB",
       "releaseDate": "2025-08-20",
@@ -45,7 +32,13 @@
       "tagline": "Track expenses and plan your budget",
       "category": "Finance",
       "description": "Budget Buddy helps you log expenses in seconds, set monthly budgets per category and see where your money goes with clear charts.",
-      "features": ["Fast expense entry", "Category budgets", "Monthly charts", "CSV export", "PIN lock"],
+      "features": [
+        "Fast expense entry",
+        "Category budgets",
+        "Monthly charts",
+        "CSV export",
+        "PIN lock"
+      ],
       "version": "1.4.2",
       "size": "61 MB",
       "releaseDate": "2025-11-03",
@@ -64,7 +57,13 @@
       "tagline": "Thousands of fun trivia questions",
       "category": "Games",
       "description": "Challenge yourself with trivia across science, history, sports and movies. Play solo or pass-and-play with friends.",
-      "features": ["5,000+ questions", "10 categories", "Pass-and-play mode", "Daily challenge", "Leaderboard"],
+      "features": [
+        "5,000+ questions",
+        "10 categories",
+        "Pass-and-play mode",
+        "Daily challenge",
+        "Leaderboard"
+      ],
       "version": "3.0.1",
       "size": "95 MB",
       "releaseDate": "2025-03-10",
@@ -83,7 +82,13 @@
       "tagline": "Workouts, steps and progress in one place",
       "category": "Health & Fitness",
       "description": "FitTrack logs workouts, counts steps and visualises your progress over time with simple goal tracking.",
-      "features": ["Workout logger", "Step counter", "Goal tracking", "Progress charts", "Rest timer"],
+      "features": [
+        "Workout logger",
+        "Step counter",
+        "Goal tracking",
+        "Progress charts",
+        "Rest timer"
+      ],
       "version": "1.2.0",
       "size": "70 MB",
       "releaseDate": "2026-02-01",
@@ -102,7 +107,13 @@
       "tagline": "Private, encrypted notes",
       "category": "Productivity",
       "description": "NoteVault stores your notes locally with encryption, folders, checklists and markdown formatting.",
-      "features": ["Encrypted storage", "Folders and tags", "Markdown support", "Checklists", "Biometric unlock"],
+      "features": [
+        "Encrypted storage",
+        "Folders and tags",
+        "Markdown support",
+        "Checklists",
+        "Biometric unlock"
+      ],
       "version": "1.1.0",
       "size": "54 MB",
       "releaseDate": "2026-04-12",
@@ -121,7 +132,13 @@
       "tagline": "Offline music player with equalizer",
       "category": "Music & Audio",
       "description": "BeatBox plays your local music with a 10-band equalizer, playlists, sleep timer and a beautiful now-playing screen.",
-      "features": ["10-band equalizer", "Playlists", "Sleep timer", "Lyrics view", "Widget support"],
+      "features": [
+        "10-band equalizer",
+        "Playlists",
+        "Sleep timer",
+        "Lyrics view",
+        "Widget support"
+      ],
       "version": "2.0.0",
       "size": "66 MB",
       "releaseDate": "2025-06-18",
@@ -140,7 +157,13 @@
       "tagline": "Build your vocabulary daily",
       "category": "Education",
       "description": "WordLearn teaches new words every day with flashcards, spaced repetition and quick quizzes.",
-      "features": ["Daily words", "Spaced repetition", "Flashcards", "Pronunciation audio", "Streak tracking"],
+      "features": [
+        "Daily words",
+        "Spaced repetition",
+        "Flashcards",
+        "Pronunciation audio",
+        "Streak tracking"
+      ],
       "version": "1.3.0",
       "size": "58 MB",
       "releaseDate": "2025-09-09",
@@ -159,7 +182,13 @@
       "tagline": "Endless arcade runner in space",
       "category": "Games",
       "description": "Dodge asteroids, collect stars and unlock ships in this fast-paced endless runner.",
-      "features": ["Endless levels", "12 unlockable ships", "Power-ups", "Offline play", "Controller support"],
+      "features": [
+        "Endless levels",
+        "12 unlockable ships",
+        "Power-ups",
+        "Offline play",
+        "Controller support"
+      ],
       "version": "1.5.0",
       "size": "99 MB",
       "releaseDate": "2025-12-01",
@@ -178,7 +207,13 @@
       "tagline": "Scan and create QR codes instantly",
       "category": "Tools",
       "description": "Scan QR codes and barcodes instantly, generate your own codes and keep a history of scans.",
-      "features": ["Fast scanning", "Barcode support", "QR generator", "Scan history", "Flashlight toggle"],
+      "features": [
+        "Fast scanning",
+        "Barcode support",
+        "QR generator",
+        "Scan history",
+        "Flashlight toggle"
+      ],
       "version": "1.0.3",
       "size": "50 MB",
       "releaseDate": "2026-05-05",
@@ -197,7 +232,13 @@
       "tagline": "Accurate forecasts at a glance",
       "category": "Tools",
       "description": "WeatherNow shows hourly and 7-day forecasts, rain alerts and air quality with a clean, animated interface.",
-      "features": ["Hourly forecast", "7-day outlook", "Rain alerts", "Air quality", "Home-screen widget"],
+      "features": [
+        "Hourly forecast",
+        "7-day outlook",
+        "Rain alerts",
+        "Air quality",
+        "Home-screen widget"
+      ],
       "version": "1.2.1",
       "size": "63 MB",
       "releaseDate": "2026-03-22",
