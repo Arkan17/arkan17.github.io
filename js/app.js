@@ -99,6 +99,53 @@
     next && next.addEventListener("click", () => rail.scrollBy({ left: step(), behavior: "smooth" }));
   }
 
+  /* ---------- Download counts (real numbers from GitHub Releases) ---------- */
+  const RELEASES_API = "https://api.github.com/repos/Arkan17/arkan17.github.io/releases";
+  const DL_CACHE = "arkan.downloads.v1";
+
+  function fmtCount(n) {
+    if (n < 1000) return String(n);
+    if (n < 1e6) return (n / 1e3).toFixed(n < 1e4 ? 1 : 0).replace(/.0$/, "") + "K";
+    return (n / 1e6).toFixed(n < 1e7 ? 1 : 0).replace(/.0$/, "") + "M";
+  }
+
+  async function loadDownloads() {
+    try {
+      const c = JSON.parse(sessionStorage.getItem(DL_CACHE) || "null");
+      if (c && Date.now() - c.t < 10 * 60 * 1000) return c.m;
+    } catch (e) { /* storage unavailable */ }
+    const map = {};
+    for (let page = 1; page <= 5; page++) {
+      const res = await fetch(`${RELEASES_API}?per_page=100&page=${page}`, { headers: { Accept: "application/vnd.github+json" } });
+      if (!res.ok) throw new Error("GitHub API " + res.status);
+      const rels = await res.json();
+      for (const r of rels) {
+        const m = /^(.+)-v[0-9A-Za-z._]+$/.exec(r.tag_name || "");
+        if (!m) continue;
+        const n = (r.assets || []).filter((a) => /.apk$/i.test(a.name)).reduce((t, a) => t + (a.download_count || 0), 0);
+        map[m[1]] = (map[m[1]] || 0) + n;
+      }
+      if (rels.length < 100) break;
+    }
+    try { sessionStorage.setItem(DL_CACHE, JSON.stringify({ t: Date.now(), m: map })); } catch (e) { /* ignore */ }
+    return map;
+  }
+
+  /* Fill every [data-dl] / [data-dl-sub] / #stat-dl element once counts arrive */
+  async function applyDownloads(apps) {
+    let map;
+    try { map = await loadDownloads(); } catch (e) { console.warn("Download counts unavailable:", e); }
+    document.querySelectorAll("[data-dl]").forEach((el) => {
+      el.textContent = map ? fmtCount(map[el.dataset.dl] || 0) : "—";
+    });
+    document.querySelectorAll("[data-dl-sub]").forEach((el) => {
+      const n = map ? map[el.dataset.dlSub] || 0 : 0;
+      el.textContent = n ? ` · ${fmtCount(n)} downloads` : "";
+    });
+    const total = $("#stat-dl");
+    if (total) total.textContent = map ? fmtCount(apps.reduce((t, a) => t + (map[a.id] || 0), 0)) : "—";
+  }
+
   async function loadApps() {
     const res = await fetch(DATA_URL, { cache: "no-cache" });
     if (!res.ok) throw new Error("Could not load " + DATA_URL);
@@ -131,7 +178,6 @@
     const cats = ["All", ...Array.from(new Set(apps.map((a) => a.category))).sort()];
     chipsWrap.innerHTML = cats.map((c) => `<button class="chip${c === "All" ? " active" : ""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
     $("#stat-apps").textContent = apps.length;
-    $("#stat-cats").textContent = cats.length - 1;
 
     const featured = apps.filter((a) => a.featured);
     $("#featured-rail").innerHTML = (featured.length ? featured : apps.slice(0, 4)).map(featCard).join("");
@@ -159,7 +205,7 @@
           <a href="${detailUrl(a)}"><img class="app-icon" src="${iconOf(a)}" alt="${esc(a.name)} icon" loading="lazy" width="64" height="64"></a>
           <a class="info" href="${detailUrl(a)}">
             <h3>${esc(a.name)}</h3>
-            <div class="sub">${esc(a.category)} · ${esc(a.size)}</div>
+            <div class="sub">${esc(a.category)} · ${esc(a.size)}<span data-dl-sub="${esc(a.id)}"></span></div>
             <span class="pill">v${esc(a.version)}</span>
           </a>
           ${getButton(a)}
@@ -170,15 +216,17 @@
       const chip = e.target.closest(".chip");
       if (!chip) return;
       activeCat = chip.dataset.cat;
-      $$(".chip", chipsWrap).forEach((c) => c.classList.toggle("active", c === chip));
+      $(".chip", chipsWrap).forEach((c) => c.classList.toggle("active", c === chip));
       render();
+      applyDownloads(apps);
     });
-    input.addEventListener("input", render);
+    input.addEventListener("input", () => { render(); applyDownloads(apps); });
     form.addEventListener("submit", (e) => { e.preventDefault(); render(); $("#apps").scrollIntoView({ behavior: "smooth" }); });
 
     const q = new URLSearchParams(location.search).get("q");
     if (q) { input.value = q; }
     render();
+    applyDownloads(apps);
     if (q) $("#apps").scrollIntoView();
   }
 
@@ -210,9 +258,9 @@
         </div>
       </div>
       <div class="d-stats box">
+        <div><strong data-dl="${esc(app.id)}">…</strong><small>Downloads</small></div>
         <div><strong>${esc(app.version)}</strong><small>Version</small></div>
         <div><strong>${esc(app.size)}</strong><small>Size</small></div>
-        <div><strong>${esc(app.minAndroid)}+</strong><small>Android</small></div>
         <div><strong>${formatDate(app.updated)}</strong><small>Updated</small></div>
       </div>
       <div class="d-actions">
@@ -243,6 +291,7 @@
           <div class="panel box">
             <h2>App info</h2>
             <table class="info-table">
+              <tr><td>Downloads</td><td data-dl="${esc(app.id)}">…</td></tr>
               <tr><td>Version</td><td>${esc(app.version)}</td></tr>
               <tr><td>Size</td><td>${esc(app.size)}</td></tr>
               <tr><td>Released</td><td>${formatDate(app.releaseDate)}</td></tr>
@@ -264,6 +313,7 @@
       </section>` : ""}`;
 
     wireRail($("#more-rail"), $("#more-prev"), $("#more-next"));
+    applyDownloads(apps);
 
     $("#share-btn").addEventListener("click", async () => {
       const data = { title: app.name, text: app.tagline, url: location.href };
