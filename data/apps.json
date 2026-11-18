@@ -2,31 +2,6 @@
   "_readme": "Edit this file to add or update apps. downloadUrl should point to an APK attached to a GitHub Release, e.g. https://github.com/Arkan17/<repo>/releases/download/<tag>/<file>.apk. Leave it empty to show 'Coming soon'. icon and screenshots can be image paths/URLs; leave them empty to use generated placeholders.",
   "apps": [
     {
-      "id": "space-runner",
-      "name": "Space Runner",
-      "tagline": "Endless arcade runner in space",
-      "category": "Games",
-      "description": "Dodge asteroids, collect stars and unlock ships in this fast-paced endless runner.",
-      "features": [
-        "Endless levels",
-        "12 unlockable ships",
-        "Power-ups",
-        "Offline play",
-        "Controller support"
-      ],
-      "version": "1.5.0",
-      "size": "99 MB",
-      "releaseDate": "2025-12-01",
-      "updated": "2026-10-11",
-      "minAndroid": "9.0",
-      "changelog": "New ships and controller support.",
-      "color": "#ec4899",
-      "icon": "",
-      "screenshots": [],
-      "downloadUrl": "",
-      "featured": false
-    },
-    {
       "id": "qr-scan",
       "name": "QR Scan Pro",
       "tagline": "Scan and create QR codes instantly",
