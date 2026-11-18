@@ -2,31 +2,6 @@
   "_readme": "Edit this file to add or update apps. downloadUrl should point to an APK attached to a GitHub Release, e.g. https://github.com/Arkan17/<repo>/releases/download/<tag>/<file>.apk. Leave it empty to show 'Coming soon'. icon and screenshots can be image paths/URLs; leave them empty to use generated placeholders.",
   "apps": [
     {
-      "id": "qr-scan",
-      "name": "QR Scan Pro",
-      "tagline": "Scan and create QR codes instantly",
-      "category": "Tools",
-      "description": "Scan QR codes and barcodes instantly, generate your own codes and keep a history of scans.",
-      "features": [
-        "Fast scanning",
-        "Barcode support",
-        "QR generator",
-        "Scan history",
-        "Flashlight toggle"
-      ],
-      "version": "1.0.3",
-      "size": "50 MB",
-      "releaseDate": "2026-05-05",
-      "updated": "2026-08-15",
-      "minAndroid": "7.0",
-      "changelog": "Faster scanning and bug fixes.",
-      "color": "#14b8a6",
-      "icon": "",
-      "screenshots": [],
-      "downloadUrl": "",
-      "featured": false
-    },
-    {
       "id": "weather-now",
       "name": "WeatherNow",
       "tagline": "Accurate forecasts at a glance",
