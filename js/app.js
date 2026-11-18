@@ -1,4 +1,4 @@
-/* Arkan Apps — catalogue logic (vanilla JS, no dependencies) */
+/* Arkoid — catalogue logic (vanilla JS, no dependencies) */
 (function () {
   "use strict";
 
@@ -338,7 +338,7 @@
       root.innerHTML = `<div class="empty box" style="margin-top:40px"><h2>App not found</h2><p style="margin:10px 0 22px">The app you’re looking for doesn’t exist.</p><a class="btn btn-yellow" href="index.html#apps">Browse apps</a></div>`;
       return;
     }
-    document.title = `${app.name} — Download APK | Arkan Apps`;
+    document.title = `${app.name} — Download APK | Arkoid`;
     const md = $('meta[name="description"]');
     if (md) md.setAttribute("content", `${app.name}: ${app.tagline}. Download the latest APK (v${app.version}).`);
 

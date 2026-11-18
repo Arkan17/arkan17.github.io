@@ -1,4 +1,4 @@
-# Arkan Apps
+# Arkoid
 
 A static Android app download marketplace for **https://arkan17.github.io**, built with plain HTML, CSS and vanilla JavaScript. It has no backend and uses no paid services. APK files are hosted on **GitHub Releases**, not in this repository.
 

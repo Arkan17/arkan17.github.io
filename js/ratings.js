@@ -1,4 +1,4 @@
-/* Arkan Apps — star ratings backed by Firebase Firestore (free Spark plan).
+/* Arkoid — star ratings backed by Firebase Firestore (free Spark plan).
  * Loaded on demand by app.js only when js/ratings-config.js has a config.
  * Data: collection "ratings", one doc per (app, visitor): `${appId}_${uid}`
  *   { appId, uid, stars: 1..5, updatedAt }

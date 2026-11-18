@@ -1,4 +1,4 @@
-/* Arkan Apps — Admin panel
+/* Arkoid — Admin panel
  * Everything runs in the browser and talks to the GitHub API with your token.
  *  - App details + icon + screenshots are committed to the repo (main branch).
  *  - The APK is pushed in chunks to a temporary "apk-upload/..." branch; the
