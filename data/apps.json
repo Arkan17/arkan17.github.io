@@ -59,7 +59,7 @@
       "updated": "2026-11-26",
       "minAndroid": "7.0",
       "changelog": "First release on Arkoid.\n\nUpdates arrive automatically inside the app.",
-      "color": "#2F5BFF",
+      "color": "#2f5bff",
       "icon": "assets/apps/tutoza/icon.png",
       "screenshots": [
         "assets/apps/tutoza/shot-1.png",
@@ -68,7 +68,8 @@
         "assets/apps/tutoza/shot-4.png",
         "assets/apps/tutoza/shot-5.png"
       ],
-      "downloadUrl": ""
+      "downloadUrl": "https://github.com/Arkan17/arkan17.github.io/releases/download/tutoza-v1.0.0/Tutoza-1.0.0.apk",
+      "featured": false
     }
   ]
 }
