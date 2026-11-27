@@ -53,12 +53,12 @@
         "Notes, notices and chat with families",
         "Separate views for teachers, parents and students"
       ],
-      "version": "1.0.0",
-      "size": "121 MB",
+      "version": "1.0.1",
+      "size": "122 MB",
       "releaseDate": "2026-11-26",
-      "updated": "2026-11-26",
+      "updated": "2026-11-27",
       "minAndroid": "7.0",
-      "changelog": "First release on Arkoid.\n\nUpdates arrive automatically inside the app.",
+      "changelog": "• Photos are compressed before upload — notes load faster and use less data\n• Notes you've opened once now open instantly, even offline\n• Chat: loads the latest messages first, with \"Load earlier messages\"\n• Better security for accounts and join codes",
       "color": "#2f5bff",
       "icon": "assets/apps/tutoza/icon.png",
       "screenshots": [
@@ -68,8 +68,8 @@
         "assets/apps/tutoza/shot-4.png",
         "assets/apps/tutoza/shot-5.png"
       ],
-      "downloadUrl": "https://github.com/Arkan17/arkan17.github.io/releases/download/tutoza-v1.0.0/Tutoza-1.0.0.apk",
-      "featured": false
+      "downloadUrl": "https://github.com/Arkan17/arkan17.github.io/releases/download/tutoza-v1.0.1/Tutoza-1.0.1.apk",
+      "featured": true
     }
   ]
 }
